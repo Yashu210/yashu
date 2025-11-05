@@ -1,0 +1,83 @@
+#!/bin/bash
+# Library Management System in Linux
+
+LIBRARY_FILE="library.txt"
+
+# Function to add a book
+add_book() {
+  echo "Enter Book ID:"
+  read id
+  echo "Enter Book Title:"
+  read title
+  echo "Enter Author Name:"
+  read author
+  echo "Enter Year of Publication:"
+  read year
+
+  echo "$id | $title | $author | $year" >> $LIBRARY_FILE
+  echo "✅ Book added successfully!"
+}
+
+# Function to display all books
+view_books() {
+  if [ -s "$LIBRARY_FILE" ]; then
+    echo "📚 List of Books:"
+    echo "------------------------------------------"
+    cat $LIBRARY_FILE
+    echo "------------------------------------------"
+  else
+    echo "⚠ No books found in the library."
+  fi
+}
+
+# Function to search for a book
+search_book() {
+  echo "Enter Book ID or Title to search:"
+  read search
+  grep -i "$search" $LIBRARY_FILE > temp.txt
+
+  if [ -s temp.txt ]; then
+    echo "🔍 Search Results:"
+    cat temp.txt
+  else
+    echo "❌ No matching book found."
+  fi
+  rm -f temp.txt
+}
+
+# Function to delete a book by ID
+delete_book() {
+  echo "Enter Book ID to delete:"
+  read del_id
+
+  grep -v "^$del_id" $LIBRARY_FILE > temp.txt && mv temp.txt $LIBRARY_FILE
+  echo "🗑 Book with ID $del_id deleted (if it existed)."
+}
+
+# Function to display menu
+show_menu() {
+  echo ""
+  echo "====== 📚 Library Management System ======"
+  echo "1. Add Book"
+  echo "2. View All Books"
+  echo "3. Search Book"
+  echo "4. Delete Book"
+  echo "5. Exit"
+  echo "=========================================="
+}
+
+# Main loop
+while true; do
+  show_menu
+  echo "Enter your choice:"
+  read choice
+
+  case $choice in
+    1) add_book ;;
+    2) view_books ;;
+    3) search_book ;;
+    4) delete_book ;;
+    5) echo "👋 Exiting..."; exit 0 ;;
+    *) echo "⚠ Invalid choice, please try again!" ;;
+  esac
+done

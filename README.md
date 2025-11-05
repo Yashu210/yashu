@@ -1,2 +1,0 @@
-# yashu
-DBMS PROJECT(23BCA10797)
